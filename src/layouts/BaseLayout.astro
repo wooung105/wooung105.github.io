@@ -1,7 +1,5 @@
 ---
 import '../styles/global.css';
-import { Image } from 'astro:assets';
-import brandRabbit from '../assets/brand-rabbit.png';
 interface Props { title?: string; description?: string }
 const { title, description = '배우고 만들며 기록하는 공간, 건우의 개발 블로그입니다.' } = Astro.props;
 const pageTitle = title ? `${title} | gunwoo.log` : 'gunwoo.log — 배우고, 만들고, 기록합니다';
@@ -12,7 +10,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} /><meta name="theme-color" content="#ffffff" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" /><link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href="/favicon.png" /><link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" /><meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} /><meta property="og:url" content={canonical} />
     <title>{pageTitle}</title>
@@ -22,8 +20,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <a class="skip-link" href="#main">본문으로 건너뛰기</a>
     <header class="site-header">
       <div class="header-inner shell">
-        <a class="brand" href="/" aria-label="gunwoo.log 홈"><span class="brand-mark"><Image src={brandRabbit} width={74} height={74} alt="" /></span><span class="brand-name">GUNWOO LOG<small>by gunwoo105</small></span></a>
-        <nav aria-label="주 메뉴"><a href="/#posts">글</a><a href="/#topics">주제</a><a href="/about/">소개</a><a href="https://github.com/gunwoo105" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav>
+        <a class="brand" href="/">Wooung</a>
+        <nav aria-label="주 메뉴"><a href="/">HOME</a><a href="/about/">Resume</a><a href="/#topics">Series</a><a href="/#posts">Blog</a></nav>
         <button class="theme-toggle" type="button" aria-label="테마 변경" title="테마 변경"><span class="theme-toggle-sky" aria-hidden="true"><span class="theme-toggle-clouds"></span><span class="theme-toggle-stars">✦ · ✦</span><span class="theme-toggle-thumb"></span></span></button>
       </div>
     </header>
