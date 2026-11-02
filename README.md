@@ -29,6 +29,12 @@ draft: false
 본문을 작성합니다.
 ```
 
+연재 글은 frontmatter에 같은 `series` 이름을 추가하면 시리즈 페이지에 날짜순으로 묶입니다. `series`는 선택 사항이며, 이름에 슬래시는 사용할 수 없습니다.
+
+```yaml
+series: "블로그 만들기"
+```
+
 `draft: true`인 글은 목록과 배포 결과에서 제외됩니다. 태그 페이지는 발행된 글을 기준으로 자동 생성됩니다. 블로그 이름과 소개는 `src/layouts/BaseLayout.astro`, `src/pages/index.astro`, `src/pages/about.astro`에서 바꿀 수 있습니다.
 
 ## GitHub Pages 배포

@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate, getSeries, postUrl } from '../../lib/posts';
+export async function getStaticPaths() {
+  return (await getSeries()).map((item) => ({ params: { series: item.name }, props: { item } }));
+}
+const { item } = Astro.props;
+---
+<BaseLayout title={`${item.name} 시리즈`} description={`${item.name} 시리즈의 글 목록입니다.`}>
+  <section class="series-detail shell">
+    <a class="series-back" href="/series/">← 모든 시리즈</a>
+    <p class="eyebrow">SERIES</p>
+    <h1>{item.name}</h1>
+    <p class="series-total">{item.posts.length}개의 글</p>
+    <ol class="series-posts">
+      {item.posts.map((post, index) => <li>
+        <a href={postUrl(post)}>
+          <span class="series-number">{String(index + 1).padStart(2, '0')}</span>
+          <span class="series-post-content"><strong>{post.data.title}</strong><span>{post.data.description}</span><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time></span>
+          <span class="series-arrow" aria-hidden="true">↗</span>
+        </a>
+      </li>)}
+    </ol>
+  </section>
+</BaseLayout>
+<style>
+  .series-detail{max-width:860px;padding-top:70px;padding-bottom:100px}
+  .series-back{display:inline-block;margin-bottom:48px;color:var(--muted);font-size:12px;font-weight:700}
+  .series-back:hover{color:var(--accent)}
+  h1{margin:16px 0 8px;font-size:clamp(34px,4vw,48px);line-height:1.3;letter-spacing:-.05em;overflow-wrap:anywhere}
+  .series-total{margin:0 0 38px;color:var(--muted);font-size:14px}
+  .series-posts{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+  .series-posts li{border-bottom:1px solid var(--line)}
+  .series-posts a{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:12px;padding:24px 0}
+  .series-number,.series-arrow{color:var(--muted);font-size:13px}
+  .series-post-content{display:grid;gap:7px;min-width:0}
+  .series-post-content strong{font-size:18px;line-height:1.5;letter-spacing:-.03em;overflow-wrap:anywhere}
+  .series-posts a:hover strong{color:var(--accent)}
+  .series-post-content span,.series-post-content time{color:var(--muted);font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+  @media(max-width:600px){.series-detail{padding-top:48px;padding-bottom:70px}.series-back{margin-bottom:36px}.series-posts a{grid-template-columns:28px minmax(0,1fr) auto;gap:8px}}
+</style>
