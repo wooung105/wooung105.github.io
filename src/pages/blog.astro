@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { blogCategories, categoryIcons } from '../lib/categories';
+import { getPublishedPosts, postUrl } from '../lib/posts';
+
+const posts = await getPublishedPosts();
+const dateFormat = new Intl.DateTimeFormat('ko-KR', {
+  year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'UTC',
+});
+---
+<BaseLayout title="Blog" description="개발과 보안, 공부하며 남긴 글을 카테고리별로 모았습니다.">
+  <section class="blog-page shell" aria-labelledby="blog-title">
+    <header class="blog-heading">
+      <h1 id="blog-title">Blog</h1>
+      <p id="blog-result-count" role="status" aria-live="polite">전체 · {posts.length}개의 글</p>
+    </header>
+    <div class="blog-categories" role="group" aria-label="글 카테고리">
+      <button type="button" data-category="" aria-pressed="true" aria-controls="blog-list">전체</button>
+      {blogCategories.map((category) => <button type="button" data-category={category} aria-pressed="false" aria-controls="blog-list">{category}</button>)}
+    </div>
+    <div id="blog-list" class="blog-list">
+      {posts.map((post) => <article class="blog-entry" data-category={post.data.category ?? ''}>
+        <a class="blog-thumbnail" href={postUrl(post)} tabindex="-1" aria-hidden="true">
+          <img src={post.data.thumbnail || '/favicon.png'} width="88" height="88" alt="" loading="lazy" decoding="async" />
+          <span class="blog-category-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d={categoryIcons[post.data.category ?? '블로그/기술문서']} /></svg></span>
+        </a>
+        <div class="blog-entry-content">
+          <h2><a href={postUrl(post)}>{post.data.title}</a></h2>
+          <p>{post.data.description}</p>
+          {post.data.tags.length > 0 && <ul class="blog-tags" aria-label="글 태그">{post.data.tags.map((tag) => <li><a href={`/tags/${encodeURIComponent(tag)}/`}>{tag}</a></li>)}</ul>}
+        </div>
+        <time datetime={post.data.date.toISOString()}>{dateFormat.format(post.data.date)}</time>
+      </article>)}
+    </div>
+    <p class="blog-empty" hidden={posts.length > 0}>아직 작성된 글이 없습니다.</p>
+  </section>
+</BaseLayout>
+
+<script>
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('.blog-categories button')];
+  const entries = [...document.querySelectorAll<HTMLElement>('.blog-entry')];
+  const count = document.querySelector<HTMLElement>('#blog-result-count');
+  const empty = document.querySelector<HTMLElement>('.blog-empty');
+
+  function filterPosts(category: string) {
+    let visible = 0;
+    for (const entry of entries) {
+      const matches = !category || entry.dataset.category === category;
+      entry.hidden = !matches;
+      if (matches) visible++;
+    }
+    for (const button of buttons) button.setAttribute('aria-pressed', String(button.dataset.category === category));
+    if (count) count.textContent = `${category || '전체'} · ${visible}개의 글`;
+    if (empty) {
+      empty.hidden = visible > 0;
+      empty.textContent = category ? '이 카테고리에 작성된 글이 없습니다.' : '아직 작성된 글이 없습니다.';
+    }
+  }
+
+  function restoreCategory() {
+    const requested = new URL(window.location.href).searchParams.get('category') || '';
+    filterPosts(buttons.some((button) => button.dataset.category === requested) ? requested : '');
+  }
+
+  for (const button of buttons) {
+    button.addEventListener('click', () => {
+      const category = button.dataset.category || '';
+      const url = new URL(window.location.href);
+      if (category) url.searchParams.set('category', category);
+      else url.searchParams.delete('category');
+      if (url.href !== window.location.href) window.history.pushState(null, '', url);
+      filterPosts(category);
+    });
+  }
+  window.addEventListener('popstate', restoreCategory);
+  restoreCategory();
+</script>
+
+<style>
+  .blog-page{padding-top:48px;padding-bottom:96px}
+  .blog-heading{display:flex;align-items:baseline;justify-content:space-between;gap:20px;margin-bottom:24px}
+  .blog-heading h1{margin:0;font-size:32px;letter-spacing:-.04em}
+  .blog-heading p{margin:0;color:var(--muted);font-size:12px;text-align:right}
+  .blog-categories{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:25px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+  .blog-categories button{border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--muted);padding:8px 14px;font-size:13px;line-height:1.5;cursor:pointer}
+  .blog-categories button:hover{border-color:var(--accent);color:var(--accent)}
+  .blog-categories button[aria-pressed='true']{background:var(--text);border-color:var(--text);color:var(--bg)}
+  .blog-entry{display:grid;grid-template-columns:88px minmax(0,1fr);column-gap:24px;row-gap:10px;padding:28px 0}
+  .blog-thumbnail{position:relative;display:block;align-self:start;width:88px;height:88px}
+  .blog-thumbnail img{display:block;width:100%;height:100%;border:2px solid var(--accent);border-radius:50%;object-fit:cover;background:#fff}
+  .blog-category-icon{position:absolute;right:-4px;bottom:-4px;display:grid;place-items:center;width:32px;height:32px;border:2px solid var(--accent);border-radius:50%;background:var(--bg);color:var(--accent)}
+  .blog-category-icon svg{width:18px;height:18px}
+  .blog-entry h2{margin:0;font-size:clamp(22px,2.3vw,28px);font-weight:700;line-height:1.45;letter-spacing:-.04em;overflow-wrap:anywhere}
+  .blog-entry h2 a:hover{color:var(--accent)}
+  .blog-entry-content>p{margin:8px 0 0;color:var(--muted);font-size:16px;line-height:1.7;overflow-wrap:anywhere}
+  .blog-tags{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:12px 0 0;padding:0}
+  .blog-tags a{display:block;border:1px solid var(--accent);border-radius:999px;padding:2px 9px;color:var(--accent);font-size:13px;line-height:1.5;overflow-wrap:anywhere}
+  .blog-tags a:hover{background:var(--soft)}
+  .blog-entry>time{grid-column:2;justify-self:end;color:var(--muted);font-size:12px;line-height:1.5}
+  .blog-empty{padding:40px 0;color:var(--muted);font-size:14px;text-align:center}
+  @media(max-width:600px){
+    .blog-page{padding-top:32px;padding-bottom:64px}
+    .blog-heading{align-items:center;gap:12px}
+    .blog-heading h1{font-size:28px}
+    .blog-heading p{max-width:65%;font-size:11px}
+    .blog-categories{gap:7px;margin-bottom:12px;padding-bottom:20px}
+    .blog-categories button{padding:6px 11px;font-size:12px}
+    .blog-entry{grid-template-columns:56px minmax(0,1fr);column-gap:16px;padding:24px 0}
+    .blog-thumbnail{width:56px;height:56px}
+    .blog-category-icon{width:25px;height:25px;right:-3px;bottom:-3px}
+    .blog-category-icon svg{width:14px;height:14px}
+    .blog-entry h2{font-size:20px}
+    .blog-entry-content>p{font-size:13px;line-height:1.65}
+    .blog-tags{gap:6px;margin-top:10px}
+    .blog-tags a{font-size:11px;padding:2px 8px}
+    .blog-entry>time{font-size:11px}
+  }
+</style>

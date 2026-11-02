@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { blogCategories } from './lib/categories';
 
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
@@ -8,6 +9,8 @@ const blog = defineCollection({
     description: z.string(),
     date: z.coerce.date(),
     tags: z.array(z.string()).default([]),
+    category: z.enum(blogCategories).optional(),
+    thumbnail: z.string().optional(),
     series: z.string().trim().min(1).refine((name) => !/[\\/]/.test(name) && name !== '.' && name !== '..', '시리즈 이름에는 슬래시를 사용할 수 없습니다.').optional(),
     draft: z.boolean().default(false),
   }),

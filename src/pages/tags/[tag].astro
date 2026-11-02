@@ -9,4 +9,4 @@ export async function getStaticPaths() {
 }
 const { tag, posts } = Astro.props;
 ---
-<BaseLayout title={`${tag} 태그`} description={`${tag} 주제로 작성한 글 목록입니다.`}><section class="simple-page tag-page"><a class="back-link" href="/#posts">← 모든 기록</a><p class="eyebrow">TOPIC ARCHIVE</p><h1># {tag}<span>.</span></h1><p class="page-lead">이 주제로 작성한 {posts.length}개의 기록</p><PostList posts={posts} /></section></BaseLayout>
+<BaseLayout title={`${tag} 태그`} description={`${tag} 주제로 작성한 글 목록입니다.`}><section class="simple-page tag-page"><a class="back-link" href="/blog/">← 모든 기록</a><p class="eyebrow">TOPIC ARCHIVE</p><h1># {tag}<span>.</span></h1><p class="page-lead">이 주제로 작성한 {posts.length}개의 기록</p><PostList posts={posts} /></section></BaseLayout>
