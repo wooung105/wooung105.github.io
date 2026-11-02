@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import ThemeToggle from '../components/ThemeToggle.astro';
 interface Props { title?: string; description?: string }
 const { title, description = '배우고 만들며 기록하는 공간, 건우의 개발 블로그입니다.' } = Astro.props;
 const pageTitle = title ? `${title} | gunwoo.log` : 'gunwoo.log — 배우고, 만들고, 기록합니다';
@@ -14,7 +15,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:type" content="website" /><meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} /><meta property="og:url" content={canonical} />
     <title>{pageTitle}</title>
-    <script is:inline>try { document.documentElement.dataset.theme = localStorage.getItem('gunwoo-theme') || 'light'; } catch {}</script>
+    <script is:inline>
+      let theme = 'light';
+      try { if (localStorage.getItem('gunwoo-theme') === 'dark') theme = 'dark'; } catch {}
+      document.documentElement.dataset.theme = theme;
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'dark' ? '#000000' : '#ffffff');
+    </script>
   </head>
   <body class:list={[Astro.url.pathname === '/' && 'home-page']}>
     <a class="skip-link" href="#main">본문으로 건너뛰기</a>
@@ -22,25 +28,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       <div class="header-inner shell">
         <a class="brand" href="/">Wooung</a>
         <nav aria-label="주 메뉴"><a href="/" aria-current={Astro.url.pathname === '/' ? 'page' : undefined}>HOME</a><a href="/resume/" aria-current={Astro.url.pathname.replace(/\/$/, '') === '/resume' ? 'page' : undefined}>Resume</a><a href="/series/" aria-current={Astro.url.pathname.startsWith('/series/') ? 'page' : undefined}>Series</a><a href="/blog/" aria-current={Astro.url.pathname.startsWith('/blog') || Astro.url.pathname.startsWith('/posts/') ? 'page' : undefined}>Blog</a></nav>
-        <button class="theme-toggle" type="button" aria-label="테마 변경" title="테마 변경"><span class="theme-toggle-sky" aria-hidden="true"><span class="theme-toggle-clouds"></span><span class="theme-toggle-stars">✦ · ✦</span><span class="theme-toggle-thumb"></span></span></button>
+        <ThemeToggle />
       </div>
     </header>
     <main id="main"><slot /></main>
     <footer class="site-footer"><div class="shell footer-inner"><div><a class="footer-brand" href="/">gunwoo<span>.</span>log</a><p>배우고, 만들고, 기록합니다.</p></div><div class="footer-right"><a href="https://github.com/gunwoo105" target="_blank" rel="noopener noreferrer">GitHub ↗</a><p>© {new Date().getFullYear()} gunwoo105</p></div></div></footer>
-    <script>
-      const button = document.querySelector<HTMLButtonElement>('.theme-toggle');
-      function updateThemeButton() {
-        const dark = document.documentElement.dataset.theme === 'dark';
-        button?.setAttribute('aria-label', dark ? '밝은 테마로 변경' : '어두운 테마로 변경');
-        button?.setAttribute('aria-pressed', String(dark));
-      }
-      updateThemeButton();
-      button?.addEventListener('click', () => {
-        const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-        document.documentElement.dataset.theme = theme;
-        try { localStorage.setItem('gunwoo-theme', theme); } catch {}
-        updateThemeButton();
-      });
-    </script>
   </body>
 </html>
