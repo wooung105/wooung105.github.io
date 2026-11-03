@@ -21,7 +21,7 @@ const series = await getSeries();
       <PostList posts={posts} /><p class="empty-state search-empty" hidden>검색 결과가 없습니다.</p>
     </section>
     <aside class="sidebar" aria-label="블로그 정보와 주제">
-      <section class="profile-card"><div class="profile-heading"><div class="profile-avatar"><Image src={viscacha} width={180} height={180} alt="졸린 비스카차 캐릭터" /></div><h2>wooung105</h2></div><p>김건우</p><a href="https://github.com/wooung105" target="_blank" rel="noopener noreferrer">GitHub 프로필 ↗</a></section>
+      <section class="profile-card"><div class="profile-heading"><div class="profile-avatar"><Image src={viscacha} width={180} height={180} alt="졸린 비스카차 캐릭터" /></div><div><h2>wooung105</h2><p>김건우</p></div></div><p>고려대학교(세종)<br />인공지능사이버보안학과<br />화이트햇스쿨 4기</p><a href="https://github.com/wooung105" target="_blank" rel="noopener noreferrer">GitHub 프로필 ↗</a></section>
       <section class="sidebar-topics" id="topics"><div class="sidebar-heading"><h2>주제별 기록</h2><span>{tags.length}</span></div>{tags.length ? <ul>{tags.map((tag) => <li><a href={`/tags/${encodeURIComponent(tag)}/`}><span>{tag}</span><span>{posts.filter((post) => post.data.tags.includes(tag)).length}</span></a></li>)}</ul> : <p>아직 주제가 없습니다.</p>}</section>
     </aside>
   </div>

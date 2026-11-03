@@ -50,8 +50,9 @@ main{flex:1}
 .home-page .profile-card{padding:20px 0;background:none;border:0;border-top:2px solid var(--line);border-bottom:1px solid var(--line);border-radius:0}
 .home-page .profile-heading{display:flex;align-items:center;gap:11px}
 .home-page .profile-heading h2{margin:0;font-size:13px}
+.home-page .profile-heading p{margin:3px 0 0;font-size:11px}
 .home-page .profile-avatar{width:44px;height:44px;flex-shrink:0}
-.home-page .profile-card p{margin-top:16px}
+.home-page .profile-card>p{margin-top:16px}
 @media(min-width:1500px){.home-page .hero{padding-top:85px;padding-bottom:85px}.home-page .hero h1{font-size:66px}}
 @media(max-width:1100px){
   .home-page .shell{width:calc(100% - 72px)}
