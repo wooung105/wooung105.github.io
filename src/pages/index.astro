@@ -3,17 +3,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PostList from '../components/PostList.astro';
 import { Image } from 'astro:assets';
 import viscacha from '../assets/viscacha.png';
-import { formatDate, getPublishedPosts, getSeries, postUrl } from '../lib/posts';
+import { getPublishedPosts, getSeries } from '../lib/posts';
 const posts = await getPublishedPosts();
 const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort((a, b) => a.localeCompare(b));
-const featured = posts[0];
 const series = await getSeries();
 ---
 <BaseLayout>
-  <section class="hero shell" aria-labelledby="hero-title">
-    <div class="hero-copy"><p class="eyebrow"><span class="status-dot"></span> 개발하며 남기는 생각과 경험</p><h1 id="hero-title">배우고, 만들고,<br />기록합니다<span class="accent">.</span></h1><p class="hero-description">안녕하세요, 건우입니다.<br />개발하며 발견한 것들과 작은 배움의 순간을 기록합니다.</p><a class="text-link" href="/about/">이 블로그에 대하여 <span aria-hidden="true">↗</span></a></div>
-    {featured && <a class="featured-note" href={postUrl(featured)}><div class="note-top"><span>가장 최근의 기록</span><span aria-hidden="true">↗</span></div><div class="note-visual" aria-hidden="true"><span class="note-code">&lt; LOG /&gt;</span><span class="note-visual-title">Build.<br />Learn.<br />Repeat<span>.</span></span><span class="note-visual-bottom">A NOTE TO MY FUTURE SELF</span></div><div class="note-content"><span class="eyebrow">{featured.data.tags[0] || '기록'}</span><h2>{featured.data.title}</h2><div class="note-date"><time datetime={featured.data.date.toISOString()}>{formatDate(featured.data.date)}</time><span>읽어보기 →</span></div></div></a>}
-  </section>
   <section class="home-series shell" aria-labelledby="home-series-title">
     <div class="home-series-heading"><h2 id="home-series-title">시리즈</h2><a href="/series/">시리즈 모아보기 ↗</a></div>
     {series.length ? <div class="home-series-grid">{series.slice(0, 3).map((item) => <a class="home-series-item" href={`/series/${encodeURIComponent(item.name)}/`}><span class="home-series-cover" aria-hidden="true">{item.name}</span><span class="home-series-info"><strong>{item.name}</strong><span>{item.posts.length}개의 글</span></span><span aria-hidden="true">→</span></a>)}</div> : <p class="home-series-empty">아직 작성된 시리즈가 없습니다.</p>}

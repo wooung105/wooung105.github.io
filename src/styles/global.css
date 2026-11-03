@@ -31,7 +31,7 @@ main{flex:1}
 .home-page .note-visual{height:auto;aspect-ratio:16/9}
 .home-page .note-content{padding:21px 23px 17px}
 .home-page .note-content h2{font-size:18px;line-height:1.65}
-.home-series{padding:26px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.home-series{margin-top:32px;padding:26px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .home-series-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:17px}
 .home-series-heading h2{margin:0;color:var(--muted);font-size:11px;font-weight:700}
 .home-series-heading a{font-size:11px;font-weight:700}
