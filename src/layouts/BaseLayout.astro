@@ -2,8 +2,8 @@
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.astro';
 interface Props { title?: string; description?: string }
-const { title, description = '김건우의 블로그입니다.' } = Astro.props;
-const pageTitle = title ? `${title} | Wooung` : 'Wooung';
+const { title, description = '건우의 기술 블로그' } = Astro.props;
+const pageTitle = title ? `${title} | Wooung` : 'Wooung · 성장일지';
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
