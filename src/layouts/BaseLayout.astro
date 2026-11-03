@@ -2,8 +2,8 @@
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.astro';
 interface Props { title?: string; description?: string }
-const { title, description = '배우고 만들며 기록하는 공간, 건우의 개발 블로그입니다.' } = Astro.props;
-const pageTitle = title ? `${title} | Wooung` : 'Wooung — 배우고, 만들고, 기록합니다';
+const { title, description = '김건우의 블로그입니다.' } = Astro.props;
+const pageTitle = title ? `${title} | Wooung` : 'Wooung';
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
@@ -27,8 +27,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <header class="site-header">
       <div class="header-inner shell">
         <a class="brand" href="/">Wooung</a>
-        <nav aria-label="주 메뉴"><a href="/" aria-current={Astro.url.pathname === '/' ? 'page' : undefined}>HOME</a><a href="/resume/" aria-current={Astro.url.pathname.replace(/\/$/, '') === '/resume' ? 'page' : undefined}>Resume</a><a href="/series/" aria-current={Astro.url.pathname.startsWith('/series/') ? 'page' : undefined}>Series</a><a href="/blog/" aria-current={Astro.url.pathname.startsWith('/blog') || Astro.url.pathname.startsWith('/posts/') ? 'page' : undefined}>Blog</a></nav>
         <ThemeToggle />
+        <nav aria-label="주 메뉴"><a href="/" aria-current={Astro.url.pathname === '/' ? 'page' : undefined}>HOME</a><a href="/resume/" aria-current={Astro.url.pathname.replace(/\/$/, '') === '/resume' ? 'page' : undefined}>Resume</a><a href="/series/" aria-current={Astro.url.pathname.startsWith('/series/') ? 'page' : undefined}>Series</a><a href="/blog/" aria-current={Astro.url.pathname.startsWith('/blog') || Astro.url.pathname.startsWith('/posts/') ? 'page' : undefined}>Blog</a></nav>
       </div>
     </header>
     <main id="main"><slot /></main>
