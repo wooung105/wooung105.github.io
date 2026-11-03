@@ -1,4 +1,4 @@
-# gunwoo.log
+# Wooung
 
 Astro로 만든 개인 블로그입니다. Markdown으로 글을 작성하고 GitHub Pages에 정적 사이트로 배포합니다.
 
@@ -46,4 +46,4 @@ series: "블로그 만들기"
 
 GitHub 저장소의 **Settings → Pages → Build and deployment → Source**에서 **GitHub Actions**를 선택합니다. 이후 `main` 브랜치에 변경 사항을 푸시하면 `.github/workflows/deploy.yml`이 사이트를 빌드하고 배포합니다. 수동 실행도 Actions 탭에서 가능합니다.
 
-현재 사이트 주소는 `https://gunwoo105.github.io`로 설정되어 있습니다. 다른 주소를 사용한다면 `astro.config.mjs`의 `site`를 수정하세요. 다른 이름의 프로젝트 저장소에 배포할 때는 저장소 이름에 맞는 `base`와 내부 링크 설정도 필요합니다.
+현재 사이트 주소는 `https://wooung105.github.io`로 설정되어 있습니다. 다른 주소를 사용한다면 `astro.config.mjs`의 `site`를 수정하세요. 다른 이름의 프로젝트 저장소에 배포할 때는 저장소 이름에 맞는 `base`와 내부 링크 설정도 필요합니다.
